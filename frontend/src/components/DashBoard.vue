@@ -8,36 +8,40 @@
                     <div class="col-lg-12 mx-auto">
                         <div class="p-3">
                             <button type="button" class="btn btn-sm btn-primary" data-toggle="modal"
-                                data-target="#addContact" @click="clearFields()">Add new</button>
+                                data-target="#addclient" @click="clearFields()">Add new</button>
                         </div>
                         <div class="card card-primary">
                             <div class="card-body">
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                           
-                                            <th>Name</th>
-                                            <th>Phone</th>
-                                            <th>Name</th>
-                                            <th>Phone</th>
-                                            <th>Action</th>
-                                            <th>Action</th>
+                                            <th>id</th>
+                                            <th>firstname</th>
+                                            <th>lastname</th>
+                                            <th>proff</th>
+                                            <th>age</th>
+                                            <th>reff</th>
+                                            <th>CRN</th>
+                                            <th>RDV</th>
+                                            <th>action</th>
                                             
                                         </tr>
                                     </thead>
-                                    <tbody v-for="contact in contacts" :key="contact.id">
+                                    <tbody v-for="client in clients" :key="client.id">
                                         <tr key="index">
-                                            <td>{{contact.id}}</td>
-                                            <td scope="row">{{contact.name}}</td>
-                                            <td>{{contact.tel}}</td>
-                                            <td>{{contact.tel}}</td>
-                                            <td>{{contact.tel}}</td>
-                                            
+                                            <td>{{client.id}}</td>
+                                            <td scope="row">{{client.firstname}}</td>
+                                            <td>{{client.lastname}}</td>
+                                            <td>{{client.proff}}</td>
+                                            <td>{{client.age}}</td>
+                                            <td>{{client.reff}}</td>
+                                            <td>{{client.CRN}}</td>
+                                            <td>{{client.RDV}}</td>
                                             <td>
-                                                <a @click="getContact(contact.id)" data-toggle="modal"
-                                                    data-target="#updateContact"
+                                                <a @click="getclient(client.id)" data-toggle="modal"
+                                                    data-target="#updateclient"
                                                     class="btn btn-sm btn-warning text-white">Update</a>
-                                                <a @click="deleteContact(contact.id)"
+                                                <a @click="deleteclient(client.id)"
                                                     class="btn btn-sm btn-danger text-white">Delete</a>
                                             </td>
                                         </tr>
@@ -49,12 +53,12 @@
                 </div>
             </div>
             <!--Add Modal -->
-            <div class="modal fade" id="addContact" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+            <div class="modal fade" id="addclient" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
                 aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Add new contact</h5>
+                            <h5 class="modal-title">Add new client</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -63,15 +67,19 @@
                             <div class="container-fluid">
 
                                 <div class="form-group">
-                                    <input type="text" required placeholder="Name" 
+                                    <input type="text" required placeholder="CRN" v-model="client.CRN"
                                         class="form-control">
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" required placeholder="Phone" 
+                                    <input type="text" required placeholder="RDV" v-model="client.RDV"
                                         class="form-control">
                                 </div>
                                 <div class="form-group">
-                                    <button class="btn btn-sm btn-success " @click="addContact()">Submit</button>
+                                    <input type="text" required placeholder="clientId" v-model="client.clientId"
+                                        class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-sm btn-success " @click="addclient()">Submit</button>
                                 </div>
                             </div>
                         </div>
@@ -79,12 +87,12 @@
                 </div>
             </div>
             <!--Update Modal -->
-            <div class="modal fade" id="updateContact" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+            <div class="modal fade" id="updateclient" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
                 aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Update contact</h5>
+                            <h5 class="modal-title">Update client</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -92,15 +100,15 @@
                         <div class="modal-body">
                             <div class="container-fluid">
                                 <div class="form-group">
-                                    <input type="text" required placeholder="Name" 
+                                    <input type="text" required placeholder="CRN" v-model="client.CRN"
                                         class="form-control">
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" required placeholder="Phone" 
+                                    <input type="text" required placeholder="RDV" v-model="client.RDV"
                                         class="form-control">
                                 </div>
                                 <div class="form-group">
-                                    <button class="btn btn-sm btn-success" @click="updateContact()">Submit</button>
+                                    <button class="btn btn-sm btn-success" @click="updateclient()">Submit</button>
                                 </div>
                             </div>
                         </div>
@@ -117,7 +125,105 @@
 
 export default {
   name: 'DashBoard',
-  
+  data (){
+        return{
+          clients : [],
+          randezs : [],
+          client : {id : '',firstname : '',lastname : '',proff : '',age : '',reff : '',CRN : '',RDV : '',clientId : ''},
+          randez : {id : ''}
+        }
+    },
+    created() {
+        this.getclients();
+    },
+    methods: {
+        getclients(){
+            axios.get('http://localhost/management-rdv/backend/api/clients/read.php')
+                .then( response => this.clients = response.data  )
+                .catch(err => console.log(err));
+        },
+        deleteclient(id){
+            Swal.fire({
+                title: 'Are you sure ?',
+                text: "You are going to delete this client",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes',
+                cancelButtonText : 'Cancel'
+            }).then((result) => {
+                if (result.value) {
+                    axios.delete('http://localhost/management-rdv/backend/api/randez/delete.php?id=' + id)
+                        // consol.log(client.id);
+                        .then(() => {
+                            Swal.fire(
+                                'Deleted !',
+                                'success'
+                            ).then(() => {
+                                this.clients = this.clients.filter(client => {
+                                    return client.id !== id;
+                                })
+                            })
+                        })
+                        .catch(err => console.log(err));
+                }
+            })
+        },
+        addclient(id){
+            if(this.client.RDV !== '' && this.client.CRN !== ''){
+                axios.post('http://localhost/management-rdv/backend/api/randez/create.php',{
+                    RDV : this.client.RDV,
+                    CRN : this.client.CRN,
+                    clientId :this.client.clientId
+                })
+                .then(() => {
+                    Swal.fire(
+                        'Added !',
+                        'success'
+                    ).then(() => {
+                        this.getclients();
+                        ('#addclient').modal('hide')
+                    })
+                })
+                .catch(err => console.log(err));
+            }else{
+                Swal.fire({
+                    title : 'Please fill all the fields !',
+                    type : 'warning'
+                }).then(() => {
+                    ('#addclient').modal('show')
+                })
+            }
+        },
+        updateclient() {
+            axios.put('http://localhost/profolder/backend/API/update_client.php', {
+                id : this.client.id,
+                CRN: this.client.CRN,
+                RDV: this.client.RDV
+            })
+                .then(() => {
+                    Swal.fire(
+                        'Updated !',
+                        'success'
+                    ).then(() => {
+                        this.getclients(); 
+                        ('#updateclient').modal('hide')
+                    })
+                })
+                .catch(err => console.log(err));
+        },
+        getclient(id) {
+            axios.post('http://localhost/management-rdv/backend/api/clients/read_single.php?id=' + id)
+                .then(response => {
+                    this.client = response.data;
+                })
+                .catch(err => console.log(err));
+        },
+        clearFields(){
+            this.client = {id : '',CRN : '',RDV : ''};
+        }
+    },
 }
 </script>
 

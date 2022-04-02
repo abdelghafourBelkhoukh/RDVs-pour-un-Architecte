@@ -1,13 +1,13 @@
 <?php
-  class Category {
+  class randez {
     // DB Stuff
     private $conn;
-    private $table = 'categories';
+    private $table = 'randezvous';
 
     // Properties
-    public $id;
-    public $name;
-    public $created_at;
+    public $clientId;
+    public $CRN;
+    public $RDV;
 
     // Constructor with DB
     public function __construct($db) {
@@ -17,14 +17,7 @@
     // Get categories
     public function read() {
       // Create query
-      $query = 'SELECT
-        id,
-        name,
-        created_at
-      FROM
-        ' . $this->table . '
-      ORDER BY
-        created_at DESC';
+      $query = 'SELECT * FROM randezvous';
 
       // Prepare statement
       $stmt = $this->conn->prepare($query);
@@ -68,26 +61,32 @@
     $query = 'INSERT INTO ' .
       $this->table . '
     SET
-      name = :name';
+      CRN = :CRN,
+      RDV = :RDV ,
+      clientId = :clientId';
 
   // Prepare Statement
   $stmt = $this->conn->prepare($query);
 
   // Clean data
-  $this->name = htmlspecialchars(strip_tags($this->name));
-
+  $this->CRN = htmlspecialchars(strip_tags($this->CRN));
+  $this->RDV = htmlspecialchars(strip_tags($this->RDV));
+  $this->clientId = htmlspecialchars(strip_tags($this->clientId));
   // Bind data
-  $stmt-> bindParam(':name', $this->name);
-
+  $stmt-> bindParam(':CRN', $this->CRN);
+  $stmt-> bindParam(':RDV', $this->RDV);
+  $stmt-> bindParam(':clientId', $this->clientId);
   // Execute query
   if($stmt->execute()) {
     return true;
+  }else{
+    return false;
   }
 
   // Print error if something goes wrong
-  printf("Error: $s.\n", $stmt->error);
+  
 
-  return false;
+  // return false;
   }
 
   // Update Category
@@ -96,19 +95,20 @@
     $query = 'UPDATE ' .
       $this->table . '
     SET
-      name = :name
-      WHERE
-      id = :id';
+    CRN = :CRN,
+    RDV = :RDV ,
+    id= :id';
 
   // Prepare Statement
   $stmt = $this->conn->prepare($query);
 
   // Clean data
-  $this->name = htmlspecialchars(strip_tags($this->name));
+  $this->CRN = htmlspecialchars(strip_tags($this->CRN));
+  $this->RDV = htmlspecialchars(strip_tags($this->RDV));
   $this->id = htmlspecialchars(strip_tags($this->id));
-
   // Bind data
-  $stmt-> bindParam(':name', $this->name);
+  $stmt-> bindParam(':CRN', $this->CRN);
+  $stmt-> bindParam(':RDV', $this->RDV);
   $stmt-> bindParam(':id', $this->id);
 
   // Execute query
@@ -117,9 +117,8 @@
   }
 
   // Print error if something goes wrong
-  printf("Error: $s.\n", $stmt->error);
 
-  return false;
+  // return false;
   }
 
   // Delete Category
@@ -142,8 +141,8 @@
     }
 
     // Print error if something goes wrong
-    printf("Error: $s.\n", $stmt->error);
+    
 
-    return false;
+    // return false;
     }
   }

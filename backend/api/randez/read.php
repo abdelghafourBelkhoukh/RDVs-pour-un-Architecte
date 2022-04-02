@@ -4,22 +4,22 @@
   header('Content-Type: application/json');
 
   include_once '../../config/Database.php';
-  include_once '../../models/Category.php';
+  include_once '../../models/randez.php';
 
   // Instantiate DB & connect
   $database = new Database();
   $db = $database->connect();
 
-  // Instantiate category object
-  $category = new Category($db);
+  // Instantiate randez object
+  $randez = new randez($db);
 
-  // Category read query
-  $result = $category->read();
+  // randez read query
+  $result = $randez->read();
   
   // Get row count
   $num = $result->rowCount();
 
-  // Check if any categories
+  // Check if any randez
   if($num > 0) {
         // Cat array
         $cat_arr = array();
@@ -30,7 +30,7 @@
 
           $cat_item = array(
             'id' => $id,
-            'name' => $name
+            // 'name' => $name
           );
 
           // Push to "data"
@@ -41,8 +41,8 @@
         echo json_encode($cat_arr);
 
   } else {
-        // No Categories
+        // No randez
         echo json_encode(
-          array('message' => 'No Categories Found')
+          array('message' => 'No randez Found')
         );
   }

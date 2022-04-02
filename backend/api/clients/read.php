@@ -21,7 +21,7 @@
   // Check if any clientss
   if($num > 0) {
     // clients array
-    $clientss_arr = array();
+    $clients_arr = array();
     // $clientss_arr['data'] = array();
 
     while($row = $result->fetch(PDO::FETCH_ASSOC)) {
@@ -30,7 +30,7 @@
       $clients_item = array(
         'id' => $id,
         'firstname' => $firstname,
-        'lastname' => html_entity_decode($lastname),
+        'lastname' => $lastname,
         'proff' => $proff,
         'age' => $age,
         'reff' => $reff,
@@ -39,16 +39,16 @@
       );
 
       // Push to "data"
-      array_push($clientss_arr, $clients_item);
+      array_push($clients_arr, $clients_item);
       // array_push($clientss_arr['data'], $clients_item);
     }
 
     // Turn to JSON & output
-    echo json_encode($clientss_arr);
+    echo json_encode($clients_arr);
 
   } else {
     // No clientss
     echo json_encode(
-      array('message' => 'No clientss Found')
+      array('message' => 'No clients Found')
     );
   }

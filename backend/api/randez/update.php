@@ -2,31 +2,34 @@
   // Headers
   header('Access-Control-Allow-Origin: *');
   header('Content-Type: application/json');
-  header('Access-Control-Allow-Methods: POST');
+  header('Access-Control-Allow-Methods: PUT');
   header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization,X-Requested-With');
 
   include_once '../../config/Database.php';
-  include_once '../../models/Category.php';
+  include_once '../../models/randez.php';
   // Instantiate DB & connect
   $database = new Database();
   $db = $database->connect();
 
   // Instantiate blog post object
-  $category = new Category($db);
+  $randez = new randez($db);
 
   // Get raw posted data
   $data = json_decode(file_get_contents("php://input"));
 
-  $category->name = $data->name;
-  
+  // Set ID to UPDATE
+  $randez->id = $data->id;
 
-  // Create Category
-  if($category->create()) {
+  $randez->CRN= $data->CRN;
+  $randez->RDV= $data->RDV;
+
+  // Update post
+  if($randez->update()) {
     echo json_encode(
-      array('message' => 'Category Created')
+      array('message' => 'randez Updated')
     );
   } else {
     echo json_encode(
-      array('message' => 'Category Not Created')
+      array('message' => 'randez not updated')
     );
   }

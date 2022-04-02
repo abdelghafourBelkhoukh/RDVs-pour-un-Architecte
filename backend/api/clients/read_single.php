@@ -15,7 +15,7 @@
   $clients = new clients($db);
 
   // Get ID
-  $clients->$id = isset($_GET['id']) ? $_GET['id'] : die();
+  $clients->id = isset($_GET['id']) ? $_GET['id'] : die();
 
   // Get clients
   $clients->read_single();
@@ -23,14 +23,14 @@
  
   // Create array
   $clients_arr = array(
-        'id' => $id,
-        'firstname' => $firstname,
-        'lastname' => html_entity_decode($lastname),
-        'proff' => $proff,
-        'age' => $age,
-        'reff' => $reff,
-        'CRN' => $CRN,
-        'RDV' => $RDV
+        'id' => $clients->id,
+        'firstname' =>$clients->firstname,
+        'lastname' => $clients->lastname,
+        'proff' => $clients->proff,
+        'age' => $clients->age,
+        'reff' => $clients->reff,
+        'CRN' => $clients->CRN,
+        'RDV' => $clients->RDV
   );
 
   // Make JSON

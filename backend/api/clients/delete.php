@@ -19,7 +19,7 @@
   $data = json_decode(file_get_contents("php://input"));
 
   // Set ID to delete
-  $clients->$id = $data->$id;
+  $clients->id = $_GET['id'];
 
   // Delete clients
   if($clients->delete()) {

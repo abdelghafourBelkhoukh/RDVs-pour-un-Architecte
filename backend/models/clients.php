@@ -22,10 +22,11 @@
     // Get Posts
     public function read() {
       // Create query
-      $query = 'SELECT clients.* ,randezvous.CRN,randezvous.RDV
+      $query = 'SELECT clients.* ,randezvous.id,randezvous.CRN,randezvous.RDV
       FROM clients
       INNER JOIN randezvous
-      ON randezvous.clientId = clients.id';
+      ON randezvous.clientId = clients.id
+      ORDER BY randezvous.id';
       
       // Prepare statement
       $stmt = $this->conn->prepare($query);
@@ -40,10 +41,10 @@
     public function read_single() {
           // Create query
           
-          $query = "SELECT clients.* ,randezvous.CRN,randezvous.RDV
+          $query = "SELECT clients.* ,randezvous.id,randezvous.CRN,randezvous.RDV
           FROM clients
           left JOIN randezvous
-          ON randezvous.clientId = clients.id WHERE clients.id = $this->id ";
+          ON randezvous.clientId = clients.id WHERE randezvous.id = ? ";
 
           // Prepare statement
           $stmt = $this->conn->prepare($query);
@@ -70,23 +71,23 @@
     // Create Post
     public function create() {
           // Create query
-          $query = 'INSERT INTO ' . $this->table . ' SET title = :title, body = :body, lastname = :lastname, category_id = :category_id';
+          $query = 'INSERT INTO ' . $this->table . ' SET firstname = :firstname, lastname = :lastname, proff = :proff, age = :age, reff = :reff';
 
           // Prepare statement
           $stmt = $this->conn->prepare($query);
 
           // Clean data
-          $this->title = htmlspecialchars(strip_tags($this->title));
-          $this->body = htmlspecialchars(strip_tags($this->body));
+          $this->firstname = htmlspecialchars(strip_tags($this->firstname));
           $this->lastname = htmlspecialchars(strip_tags($this->lastname));
-          $this->category_id = htmlspecialchars(strip_tags($this->category_id));
-
+          $this->proff = htmlspecialchars(strip_tags($this->proff));
+          $this->age = htmlspecialchars(strip_tags($this->age));
+          $this->reff = htmlspecialchars(strip_tags($this->reff));
           // Bind data
-          $stmt->bindParam(':title', $this->title);
-          $stmt->bindParam(':body', $this->body);
+          $stmt->bindParam(':firstname', $this->firstname);
           $stmt->bindParam(':lastname', $this->lastname);
-          $stmt->bindParam(':category_id', $this->category_id);
-
+          $stmt->bindParam(':proff', $this->proff);
+          $stmt->bindParam(':age', $this->age);
+          $stmt->bindParam(':reff', $this->reff);
           // Execute query
           if($stmt->execute()) {
             return true;
@@ -102,24 +103,26 @@
     public function update() {
           // Create query
           $query = 'UPDATE ' . $this->table . '
-                                SET title = :title, body = :body, lastname = :lastname, category_id = :category_id
+          SET firstname = :firstname, lastname = :lastname, proff = :proff, age = :age, reff = :reff
                                 WHERE id = :id';
 
           // Prepare statement
           $stmt = $this->conn->prepare($query);
 
           // Clean data
-          $this->title = htmlspecialchars(strip_tags($this->title));
-          $this->body = htmlspecialchars(strip_tags($this->body));
+          $this->firstname = htmlspecialchars(strip_tags($this->firstname));
           $this->lastname = htmlspecialchars(strip_tags($this->lastname));
-          $this->category_id = htmlspecialchars(strip_tags($this->category_id));
+          $this->proff = htmlspecialchars(strip_tags($this->proff));
+          $this->age = htmlspecialchars(strip_tags($this->age));
+          $this->reff = htmlspecialchars(strip_tags($this->reff));
           $this->id = htmlspecialchars(strip_tags($this->id));
 
           // Bind data
-          $stmt->bindParam(':title', $this->title);
-          $stmt->bindParam(':body', $this->body);
+          $stmt->bindParam(':firstname', $this->firstname);
+          $stmt->bindParam(':proff', $this->proff);
           $stmt->bindParam(':lastname', $this->lastname);
-          $stmt->bindParam(':category_id', $this->category_id);
+          $stmt->bindParam(':age', $this->age);
+          $stmt->bindParam(':reff', $this->reff);
           $stmt->bindParam(':id', $this->id);
 
           // Execute query
@@ -137,7 +140,7 @@
     public function delete() {
           
           // Create query
-          $query = 'DELETE FROM clients WHERE id = :id';
+          $query = 'DELETE FROM clients WHERE id = :id ' ;
 
           // Prepare statement
           $stmt = $this->conn->prepare($query);

@@ -6,34 +6,34 @@
   header('Access-Control-Allow-Headers: Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods, Authorization, X-Requested-With');
 
   include_once '../../config/Database.php';
-  include_once '../../models/Post.php';
+  include_once '../../models/clients.php';
 
   // Instantiate DB & connect
   $database = new Database();
   $db = $database->connect();
 
   // Instantiate blog post object
-  $post = new Post($db);
+  $clients = new clients($db);
 
   // Get raw posted data
   $data = json_decode(file_get_contents("php://input"));
 
   // Set ID to update
-  $post->id = $data->id;
+  $clients->id = $data->id;
 
-  $post->title = $data->title;
-  $post->body = $data->body;
-  $post->author = $data->author;
-  $post->category_id = $data->category_id;
+  $clients->firstname = $data->firstname;
+  $clients->lastname = $data->lastname;
+  $clients->proff = $data->proff;
+  $clients->age = $data->age;
 
   // Update post
-  if($post->update()) {
+  if($clients->update()) {
     echo json_encode(
-      array('message' => 'Post Updated')
+      array('message' => 'clients Updated')
     );
   } else {
     echo json_encode(
-      array('message' => 'Post Not Updated')
+      array('message' => 'clients Not Updated')
     );
   }
 
