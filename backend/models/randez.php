@@ -96,8 +96,7 @@
       $this->table . '
     SET
     CRN = :CRN,
-    RDV = :RDV ,
-    id= :id';
+    RDV = :RDV WHERE  id= :id';
 
   // Prepare Statement
   $stmt = $this->conn->prepare($query);

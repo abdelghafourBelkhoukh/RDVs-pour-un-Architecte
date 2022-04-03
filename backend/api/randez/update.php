@@ -19,7 +19,6 @@
 
   // Set ID to UPDATE
   $randez->id = $data->id;
-
   $randez->CRN= $data->CRN;
   $randez->RDV= $data->RDV;
 

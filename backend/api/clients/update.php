@@ -25,6 +25,7 @@
   $clients->lastname = $data->lastname;
   $clients->proff = $data->proff;
   $clients->age = $data->age;
+  $clients->age = $data->age;
 
   // Update post
   if($clients->update()) {

@@ -171,7 +171,7 @@ export default {
             })
         },
         addclient(id){
-            if(this.client.RDV !== '' && this.client.CRN !== ''){
+            if(this.client.RDV !== '' && this.client.CRN !== '' && this.client.clientId !== ''){
                 axios.post('http://localhost/management-rdv/backend/api/randez/create.php',{
                     RDV : this.client.RDV,
                     CRN : this.client.CRN,
@@ -197,7 +197,7 @@ export default {
             }
         },
         updateclient() {
-            axios.put('http://localhost/profolder/backend/API/update_client.php', {
+            axios.put('http://localhost/management-rdv/backend/api/randez/update.php', {
                 id : this.client.id,
                 CRN: this.client.CRN,
                 RDV: this.client.RDV
@@ -215,9 +215,8 @@ export default {
         },
         getclient(id) {
             axios.post('http://localhost/management-rdv/backend/api/clients/read_single.php?id=' + id)
-                .then(response => {
-                    this.client = response.data;
-                })
+                .then(response => { this.client = response.data;
+  })
                 .catch(err => console.log(err));
         },
         clearFields(){
