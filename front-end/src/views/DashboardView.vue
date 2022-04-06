@@ -14,92 +14,19 @@
       <div class="col col-7">Date</div>
       <div class="col col-8">Action</div>
     </li>
-    <li class="table-row">
-      <div class="col col-1" data-label="First name"><input :type="type" value="Abdelghafour"></div>
-      <div class="col col-2" data-label="Last name"><input :type="type" value="Belkhoukh"></div>
-      <div class="col col-3" data-label="job"><input :type="type" value="developper"></div>
-      <div class="col col-4" data-label="Age"><input :type="type" value="26"></div>
-      <div class="col col-5" data-label="Reference"><input :type="type" value="RTF16556543"></div>
-      <div class="col col-6" data-label="Date time"><input :type="type" value="10h 11h30min"></div>
-      <div class="col col-7" data-label="Date"><input :type="type"  value="29-04-2022"></div>
-      <div class="col col-8 action-icon" data-label="Action"><input :type="typeHidden" @click="Save" value="Save"><i class="fa-solid fa-pen" :style="display" @click="changeType"></i><i class="fa-solid fa-trash-can" :style="display" ></i></div>
-    </li>
-    <li class="table-row" >
-      <div class="col col-1" data-label="First name"><input :type="type" value="Abdelghafour"></div>
-      <div class="col col-2" data-label="Last name"><input :type="type" value="Belkhoukh"></div>
-      <div class="col col-3" data-label="job"><input :type="type" value="developper"></div>
-      <div class="col col-4" data-label="Age"><input :type="type" value="26"></div>
-      <div class="col col-5" data-label="Reference"><input :type="type" value="RTF16556543"></div>
-      <div class="col col-6" data-label="Date time"><input :type="type" value="10h 11h30min"></div>
-      <div class="col col-7" data-label="Date"><input :type="type"  value="29-04-2022"></div>
-      <div class="col col-8 action-icon" data-label="Action">
-        <input :type="typeHidden" @click="Save" value="Save">
-        <i class="fa-solid fa-pen" :style="display" @click="changeType"></i>
-        <i class="fa-solid fa-trash-can" :style="display" ></i>
+    <li class="table-row" v-for="client in clients" :key="client.id">
+      <div style="display: flex;width: 100%;align-items: center;">
+        <div v-for="data in Object.values(client).slice(1)" class="col col-1" data-label="First name"><input :type="(modifier == client.id)? 'text' : 'submit'" :value="data"></div>
+        <div class="col col-8 action-icon" data-label="Action">
+          <div v-if="modifier == client.id"><input style="background-color: green;color: white;border-radius: 7px;padding: 8px 11px;width: 80px;" type="button" @click="updateclient" value="Save" ></div>
+          <i v-if="modifier != client.id" class="fa-solid fa-pen" @click="changeType(client.id)"></i>
+          <i v-if="modifier != client.id" class="fa-solid fa-trash-can" @click="deleteclient(client.id)"></i>
         </div>
+      </div>
     </li>
-    <li class="table-row" >
-      <div class="col col-1" data-label="First name"><input :type="type" value="Abdelghafour"></div>
-      <div class="col col-2" data-label="Last name"><input :type="type" value="Belkhoukh"></div>
-      <div class="col col-3" data-label="job"><input :type="type" value="developper"></div>
-      <div class="col col-4" data-label="Age"><input :type="type" value="26"></div>
-      <div class="col col-5" data-label="Reference"><input :type="type" value="RTF16556543"></div>
-      <div class="col col-6" data-label="Date time"><input :type="type" value="10h 11h30min"></div>
-      <div class="col col-7" data-label="Date"><input :type="type"  value="29-04-2022"></div>
-      <div class="col col-8 action-icon" data-label="Action">
-        <input :type="typeHidden" @click="Save" value="Save">
-        <i class="fa-solid fa-pen" :style="display" @click="changeType"></i>
-        <i class="fa-solid fa-trash-can" :style="display" ></i>
-        </div>
-    </li>
-    <li class="table-row" >
-      <div class="col col-1" data-label="First name"><input :type="type" value="Abdelghafour"></div>
-      <div class="col col-2" data-label="Last name"><input :type="type" value="Belkhoukh"></div>
-      <div class="col col-3" data-label="job"><input :type="type" value="developper"></div>
-      <div class="col col-4" data-label="Age"><input :type="type" value="26"></div>
-      <div class="col col-5" data-label="Reference"><input :type="type" value="RTF16556543"></div>
-      <div class="col col-6" data-label="Date time"><input :type="type" value="10h 11h30min"></div>
-      <div class="col col-7" data-label="Date"><input :type="type"  value="29-04-2022"></div>
-      <div class="col col-8 action-icon" data-label="Action">
-        <input :type="typeHidden" @click="Save" value="Save">
-        <i class="fa-solid fa-pen" :style="display" @click="changeType"></i>
-        <i class="fa-solid fa-trash-can" :style="display" ></i>
-        </div>
-    </li>
-    <li class="table-row" >
-      <div class="col col-1" data-label="First name"><input :type="type" value="Abdelghafour"></div>
-      <div class="col col-2" data-label="Last name"><input :type="type" value="Belkhoukh"></div>
-      <div class="col col-3" data-label="job"><input :type="type" value="developper"></div>
-      <div class="col col-4" data-label="Age"><input :type="type" value="26"></div>
-      <div class="col col-5" data-label="Reference"><input :type="type" value="RTF16556543"></div>
-      <div class="col col-6" data-label="Date time"><input :type="type" value="10h 11h30min"></div>
-      <div class="col col-7" data-label="Date"><input :type="type"  value="29-04-2022"></div>
-      <div class="col col-8 action-icon" data-label="Action">
-        <input :type="typeHidden" @click="Save" value="Save">
-        <i class="fa-solid fa-pen" :style="display" @click="changeType"></i>
-        <i class="fa-solid fa-trash-can" :style="display" ></i>
-        </div>
-    </li>
-    <li class="table-row" >
-      <div class="col col-1" data-label="First name"><input :type="type" value="Abdelghafour"></div>
-      <div class="col col-2" data-label="Last name"><input :type="type" value="Belkhoukh"></div>
-      <div class="col col-3" data-label="job"><input :type="type" value="developper"></div>
-      <div class="col col-4" data-label="Age"><input :type="type" value="26"></div>
-      <div class="col col-5" data-label="Reference"><input :type="type" value="RTF16556543"></div>
-      <div class="col col-6" data-label="Date time"><input :type="type" value="10h 11h30min"></div>
-      <div class="col col-7" data-label="Date"><input :type="type"  value="29-04-2022"></div>
-      <div class="col col-8 action-icon" data-label="Action">
-        <input :type="typeHidden" @click="Save" value="Save">
-        <i class="fa-solid fa-pen" :style="display" @click="changeType"></i>
-        <i class="fa-solid fa-trash-can" :style="display" ></i>
-        </div>
-    </li>
-    
-    
   </ul>
 </div>
 </template>
-
 
 <script>
 
@@ -112,23 +39,83 @@ export default {
   },
   data(){
     return{
-      type: 'submit',
-      typeHidden: 'hidden',
-      display : "display: block;"
+      type: 'text',
+      display : "display: block;",
+      clients : [],
+      randezs : [],
+      modifier: null,
+      checkDelete: null,
+      randez : {id : ''}
     }
   },
+  created() {
+        this.getclients();
+  },
   methods:{
-    changeType(){
-      this.type= 'text';
-      this.typeHidden= 'button';
-      this.display = "display: none;"
+    changeType(id){
+      this.modifier = id;
     },
     Save(){
       this.type= 'submit';
       this.typeHidden= 'hidden';
       this.display = "display: block;"
       
-    }
+    },
+    getclients(){
+            axios.get('http://localhost/architecte/backend/api/clients/read.php')
+                .then( (response) => {
+                  this.clients = [...response.data]
+
+                })
+                .catch(err => console.log(err));
+    },
+        deleteclient(id){
+                    axios.delete('http://localhost/architecte/backend/api/randez/delete.php?id=' + id)
+                    .then(this.checkDelete = id)
+        },
+        addclient(id){
+            if(this.client.RDV !== '' && this.client.CRN !== '' && this.client.clientId !== ''){
+                axios.post('http://localhost/management-rdv/backend/api/randez/create.php',{
+                    RDV : this.client.RDV,
+                    CRN : this.client.CRN,
+                    clientId :this.client.clientId
+                })
+                .then(() => {
+                    Swal.fire(
+                        'Added !',
+                        'success'
+                    ).then(() => {
+                        this.getclients();
+                        ('#addclient').modal('hide')
+                    })
+                })
+                .catch(err => console.log(err));
+            }else{
+                Swal.fire({
+                    title : 'Please fill all the fields !',
+                    type : 'warning'
+                }).then(() => {
+                    ('#addclient').modal('show')
+                })
+            }
+        },
+        updateclient() {
+            this.modifier = null;
+            axios.put('http://localhost/architecte/backend/api/randez/update.php', {
+                id : this.client.id,
+                CRN: this.client.CRN,
+                RDV: this.client.RDV
+            }).catch(err => console.log(err));
+        },
+        getclient(id) {
+            axios.post('http://localhost/architecte/backend/api/clients/read_single.php?id=' + id)
+                .then(response => { this.client = response.data;
+  })
+                .catch(err => console.log(err));
+        },
+        clearFields(){
+            this.client = {id : '',CRN : '',RDV : ''};
+        }
   }
 };
 </script>
@@ -164,6 +151,11 @@ h2 {
     justify-content: space-between;
     margin-bottom: 25px;
     align-items: center;
+    .message{
+      width: 100%;
+      text-align: center;
+      color: lawngreen;
+    }
   }
   .table-header {
     background-color: black;
@@ -176,12 +168,8 @@ h2 {
     background-color: #ffffff;
     box-shadow: 0px 0px 9px 0px rgba(0,0,0,0.1);
     .action-icon{
-      input{
-        background-color: green;
-        color: white;
-        border-radius: 7px;
-        padding: 8px 11px;
-        width: 80px;
+      #button{
+
       }
     }
     input{

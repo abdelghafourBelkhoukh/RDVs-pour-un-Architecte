@@ -13,31 +13,33 @@
             id="referance-id"
             placeholder="Enter votre ref..."
             required
+            v-model="dayRDV.reff"
           />
           <input type="submit" @click="HelloMsg" value="Submit" />
         </div>
 
         <div class="dateRDV" v-if="showDiv == 2">
           <h3>Welcome Mr Abdelghafour</h3>
-          <label for="">jour</label>
+          <label for="start">jour</label>
           <input
             type="date"
             id="start"
             name="trip-start"
-            value="2018-07-22"
-            min="2022-01-01"
+            :min="today"
             max="2030-12-31"
+            @change="checkRDV"
+            v-model.lazy="dayRDV.RDV"
           />
           <label for="">Heure</label>
-          <select name="" id="">
-            <option value="" >choiser une heure</option>
-            <option value="N1">10 h à 10:30h</option>
-            <option value="N2">11 h à 11:30h</option>
-            <option value="N3">14 h à 14:30h</option>
-            <option value="N4">15 h à 15:30h</option>
-            <option value="N5">16 h à 16:30h</option>
+          <select name="" id="" v-model="dayRDV.CRN">
+            <option value="" selected >choiser une heure</option>
+            <option value="10 h à 10:30h">10 h à 10:30h</option>
+            <option value="11 h à 11:30h">11 h à 11:30h</option>
+            <option value="14 h à 14:30h">14 h à 14:30h</option>
+            <option value="15 h à 15:30h">15 h à 15:30h</option>
+            <option value="16 h à 16:30h">16 h à 16:30h</option>
           </select>
-          <input type="submit" @click="RdvSuccess" value="Submit" />
+          <input type="submit" @click="addRDV" value="Submit" />
         </div>
 
         <div v-if="showDiv == 3">
@@ -46,7 +48,7 @@
             <h3>Successfully</h3>
             <p>
               Your date de RDV is :
-              <b style="color: black">Mardi 11h:30min le 10/06/2022</b>
+              <b style="color: black">le {{dayRDV.RDV}} , de {{dayRDV.CRN}} </b>
             </p>
           </div>
         </div>
@@ -77,29 +79,49 @@ export default {
   data() {
     return {
       showDiv: 1,
-      RdvCondition: true
+      RdvCondition: true,
+      today : null,
+      dayRDV : { RDV : '', CRN : '',reff : ''}
     };
   },
   components: {
     NavBarRdv,
-    Footer
+    Footer 
   },
 
   methods: {
     HelloMsg() {
       const refID = document.getElementById("referance-id").value;
       if (this.RdvCondition && refID) {
+        var today = new Date();
+        this.today = today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate();
+        console.log(this.today)
         this.showDiv = 2;
       } else {
         this.showDiv = 4;
       }
     },
-    RdvSuccess() {
+    async checkRDV(){
+      
+      let respo = await axios.post("http://localhost/architecte/backend/api/randez/checkRDV.php", {
+        RDV: this.dayRDV.RDV
+      });
+        console.log(respo.data.data[0].CRN.CRN);
+
+
+    },
+    addRDV() {
+        axios.post("http://localhost/architecte/backend/api/randez/create.php", {
+        RDV: this.dayRDV.RDV,
+        CRN: this.dayRDV.CRN,
+        reff: this.dayRDV.reff,
+    });
       this.showDiv = 3;
     },
     tryAgain(){
         this.showDiv = 1;
     }
+
   },
 };
 </script>

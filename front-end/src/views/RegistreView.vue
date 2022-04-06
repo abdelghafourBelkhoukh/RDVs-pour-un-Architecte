@@ -5,25 +5,54 @@
       <div class="image_section">
         <img src="../assets/images/img_sec.jpg" alt="" />
       </div>
-      <form id="form" action="" @submit.prevent="success">
+      <form id="form" @submit.prevent="addclient">
         <div v-if="showDiv == 1">
-          <label for="" >Nom</label>
-          <input type="text" placeholder="Entrer votre nom" id="nom" required />
-          <label for="" >Prenom</label>
-          <input type="text" placeholder="Entrer votre prenom" id="prenom" required />
-          <label for="" >Age</label>
-          <input type="number" placeholder="Entrer votre age" id="age" required />
-          <label for="" >Profession</label>
-          <input type="text" placeholder="Entrer votre profession" id="profession" required />
-          <input type="submit"  value="Submit" />
+          <label for="nom">Nom</label>
+          <input
+            type="text"
+            placeholder="Entrer votre nom"
+            id="nom"
+            required
+            v-model="client.lastname"
+          />
+          <label for="prenom">Prenom</label>
+          <input
+            type="text"
+            placeholder="Entrer votre prenom"
+            id="prenom"
+            required
+            v-model="client.firstname"
+          />
+          <label for="age">Age</label>
+          <input
+            type="number"
+            placeholder="Entrer votre age"
+            id="age"
+            required
+            v-model="client.age"
+          />
+          <label for="profession">Profession</label>
+          <input
+            type="text"
+            placeholder="Entrer votre profession"
+            id="profession"
+            required
+            v-model="client.proff"
+          />
+          <input type="submit" value="Submit" />
         </div>
         <div v-if="showDiv == 2">
           <div class="success">
-            <i class="fa-regular fa-circle-check"></i>
-            <h3>Successfully Registered</h3>
+            <!-- <i class="fa-regular fa-circle-check"></i>
+            <h3>Successfully Registered</h3> -->
             <div class="copyRef">
-            <p>Your Referance is : <b style="color: black"><input type="button"  id="myInput" value="RTF16556543"></b></p>
-            <i class="fa-solid fa-copy" @click="copy"></i>
+              <p>
+                Your Referance is :
+                <b style="color: black"
+                  ><input type="button" id="myInput" v-model="Reference"
+                /></b>
+              </p>
+              <i class="fa-solid fa-copy" @click="copy"></i>
             </div>
           </div>
           <div class="reservation">
@@ -37,7 +66,20 @@
           <div class="success">
             <i class="fa-light fa-exclamation" style="color: red"></i>
             <h3 style="color: red">This account has already been registered</h3>
-            <input type="button" style="margin-top:10%;border:none;width:30%;border-radius:5px;background-color: black;color:white;padding: 5px 10px;" @click="tryAgain" value="Try again" />
+            <input
+              type="button"
+              style="
+                margin-top: 10%;
+                border: none;
+                width: 30%;
+                border-radius: 5px;
+                background-color: black;
+                color: white;
+                padding: 5px 10px;
+              "
+              @click="tryAgain"
+              value="Try again"
+            />
           </div>
         </div>
       </form>
@@ -50,48 +92,83 @@
 
 
 <script>
-
-import NavBar from '../components/NavBar.vue';
-import Footer from '../components/Footer.vue';
+import NavBar from "../components/NavBar.vue";
+import Footer from "../components/Footer.vue";
+import swal from "sweetalert";
 
 export default {
   name: "RegistreView",
-  data(){
-    return{
-      showDiv : 1,
-      RegCondition: true
-    }
+  data() {
+    return {
+      showDiv: 1,
+      RegCondition: null,
+      Reference: null,
+      client: {
+        id: "",
+        firstname: "",
+        lastname: "",
+        proff: "",
+        age: "",
+        reff: "",
+        CRN: "",
+        RDV: "",
+        clientId: "",
+      }
+    };
   },
   components: {
     NavBar,
-    Footer
+    Footer,
   },
   methods: {
-    success(){
-      const nom = document.getElementById('nom').value;
-      const prenom = document.getElementById('prenom').value;
-      const age = document.getElementById('age').value;
-      const profession = document.getElementById('profession').value;
-      if(nom && prenom && age && profession != null && this.RegCondition ){
-        this.showDiv = 2;
-      }else{
-        this.showDiv = 4;
+    async addclient() {
+      this.Reference =
+        this.client.firstname[0] +
+        this.client.lastname[0] +
+        this.client.proff[0] +
+        2022+
+        this.client.age ;
 
+      const axi = await axios.post("http://localhost/architecte/backend/api/clients/create.php", {
+        firstname: this.client.firstname,
+        lastname: this.client.lastname,
+        age: this.client.age,
+        proff: this.client.proff,
+        reff: this.Reference,
+      });
+      this.RegCondition = axi.data.response;
+      if (this.RegCondition) {
+        swal({
+          title: "Successfully Registered",
+          icon: "success",
+          button: "ok",
+        });
+
+        this.showDiv = 2;
+      } else {
+        // this.showDiv = 4;
+        swal({
+          title: "This account has already been registered",
+          icon: "error",
+          button: "try again",
+        });
       }
     },
-    tryAgain(){
-        this.showDiv = 1;
+
+    tryAgain() {
+      this.showDiv = 1;
     },
     copy() {
-  var copyText = document.getElementById("myInput").value;
-  navigator.clipboard.writeText(copyText)
-    .then(() => {
-        console.log('Text copied to clipboard');
-    })
-    .catch(err => {
-        console.error('Error in copying text: ', err);
-    });
-}
+      var copyText = document.getElementById("myInput").value;
+      navigator.clipboard
+        .writeText(copyText)
+        .then(() => {
+          console.log("Text copied to clipboard");
+        })
+        .catch((err) => {
+          console.error("Error in copying text: ", err);
+        });
+    },
   },
 };
 </script> 
@@ -109,7 +186,7 @@ main {
   margin: 5% 10% 5% 10%;
   padding: 0 2% 0 2%;
   display: flex;
-    justify-content: center;
+  justify-content: center;
 }
 
 .container {
@@ -119,7 +196,6 @@ main {
   border-radius: 15px;
   background: #ffffff;
   box-shadow: 15px 15px 40px #b3b3b3, -15px -15px 40px #ffffff;
-  
 }
 
 .container .image_section {
@@ -147,15 +223,16 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
-    .copyRef{
+    .copyRef {
       width: 60%;
       display: flex;
       justify-content: space-evenly;
-      input{
+      align-items: baseline;
+      input {
         background-color: transparent;
         border: none;
       }
-      i{
+      i {
         padding-top: 7px;
         font-size: 20px;
         color: black;

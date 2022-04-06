@@ -13,12 +13,13 @@
   
         </div>
         <div class="Ref-admin" v-if="showDiv === 'Admin'">
-          <label for="">Referance</label>
+          <label for="referance-id">Referance</label>
           <input
             type="text"
             id="referance-id"
             placeholder="Enter admin ref..."
             required
+            v-model="reff.AdminReff"
           />
           <input type="submit" @click="GoToDash" value="Submit" />
         </div>
@@ -29,6 +30,7 @@
             id="referance-id"
             placeholder="Enter client ref..."
             required
+            v-model="reff.ClientReff"
           />
           <input type="submit" @click="GoToClientPage" value="Submit" />
         </div>
@@ -51,7 +53,8 @@ export default {
   data(){
     return{
       showDiv : 1,
-      checkRef : true
+      checkRef : null,
+      reff : { AdminReff : '' , ClientReff : ''}
     }
   },
   components: {
@@ -59,27 +62,62 @@ export default {
     Footer
   },
   methods: {
+
+
+    async GoToDash() {
+    if (this.AdminReff != '' ) {
+      let respon = await axios.post('http://localhost/architecte/backend/api/clients/loginAdmin.php', {
+        reff: this.reff.AdminReff
+      });
+
+      console.log(respon);
+      this.checkRef = respon.data.response;
+
+        if (this.checkRef) {
+
+          this.$router.push('/Dashboard');
+
+        } else {
+        alert("Admin does not exist");
+        }
+
+    } else {
+      alert('Please enter reff');
+    }
+    },
+    
+    
+    async GoToClientPage() {
+    if (this.reff.ClientReff != '' ) {
+      let respon = await axios.post('http://localhost/architecte/backend/api/clients/loginClient.php', {
+        reff: this.reff.ClientReff
+      });
+
+      console.log(respon);
+      this.checkRef = respon.data.response;
+
+        if (this.checkRef) {
+
+          this.$router.push('/ClientPage')
+
+        } else {
+        alert("User does not exist");
+        }
+
+    } else {
+      alert('Please enter reff');
+    }
+    },
+
+
+
     loginAdmin(){
         this.showDiv = 'Admin';
     },
     loginClient(){
         this.showDiv = 'Client';
-    },
-    GoToDash(){
-      if (this.checkRef) {
-        this.$router.push('/Dashboard')
-      }else{
-        alert('Reference not founded !!!')
-      }
-    },
-    GoToClientPage(){
-      if (this.checkRef) {
-        this.$router.push('/ClientPage')
-      }else{
-        alert('Reference not founded !!!')
-      }
-    },
-  },
+    }
+  }
 };
 </script> 
 

@@ -31,7 +31,6 @@ export default {
   height: 10vh;
   justify-content: space-between;
   padding: 13px 0 12px 0;
-  padding-right: 50%;
 }
 
 .navBar img {
