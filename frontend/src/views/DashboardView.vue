@@ -62,7 +62,7 @@ export default {
       
     },
     getclients(){
-            axios.get('http://localhost/management-rdv/backend/api/clients/read.php')
+            axios.get('http://localhost/architecte/backend/api/clients/read.php')
                 .then( (response) => {
                   this.clients = [...response.data]
 
@@ -81,7 +81,7 @@ export default {
                 cancelButtonText : 'Cancel'
             }).then((result) => {
                 if (result.value) {
-                    axios.delete('http://localhost/management-rdv/backend/api/randez/delete.php?id=' + id)
+                    axios.delete('http://localhost/architecte/backend/api/randez/delete.php?id=' + id)
                         // consol.log(client.id);
                         .then(() => {
                             Swal.fire(
@@ -99,7 +99,7 @@ export default {
         },
         addclient(id){
             if(this.client.RDV !== '' && this.client.CRN !== '' && this.client.clientId !== ''){
-                axios.post('http://localhost/management-rdv/backend/api/randez/create.php',{
+                axios.post('http://localhost/architecte/backend/api/randez/create.php',{
                     RDV : this.client.RDV,
                     CRN : this.client.CRN,
                     clientId :this.client.clientId
@@ -127,7 +127,7 @@ export default {
             let day = event.target.parentElement.parentElement.parentElement.children[5].firstElementChild.value;
             let time = event.target.parentElement.parentElement.parentElement.children[6].firstElementChild.value;
             console.log(day,time);
-            axios.put('http://localhost/management-rdv/backend/api/randez/update.php', {
+            axios.put('http://localhost/architecte/backend/api/randez/update.php', {
               id : id,
                 CRN: day,
                 RDV: time
@@ -144,7 +144,7 @@ export default {
           this.modifier = null;
         },
         getclient(id) {
-            axios.post('http://localhost/management-rdv/backend/api/clients/read_single.php?id=' + id)
+            axios.post('http://localhost/architecte/backend/api/clients/read_single.php?id=' + id)
                 .then(response => { this.client = response.data;
   })
                 .catch(err => console.log(err));

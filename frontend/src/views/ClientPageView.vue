@@ -15,13 +15,18 @@
           <div class="col col-2">Date</div>
           <div class="col col-3">Action</div>
         </li>
-        <li class="table-row" v-for="(client) in clients" :key="client.id">
+        <li class="table-row" v-for="RDV in RDVs" :key="RDV.id">
             <div style="display: flex;width: 100%;align-items: center;">
-              <div v-for="data in Object.values(client).slice(6)" class="col col-1" data-label="First name"><input :type="(modifier == client.id)? 'text' : 'submit'" :value="data"></div>
+              <div class="col col-1" data-label="First name">
+                <input :type="(modifier == RDV.id)? 'text' : 'submit'" :value="RDV.CRN">
+              </div>
+              <div class="col col-1" data-label="First name">
+                <input :type="(modifier == RDV.id)? 'text' : 'submit'" :value="RDV.RDV">
+              </div>
                 <div class="col col-8 action-icon" data-label="Action">
-                <div v-if="modifier == client.id"><input style="background-color: green;color: white;border-radius: 7px;padding: 8px 11px;width: 80px;" type="button" @click="updateclient" value="Save" ></div>
-                <i v-if="modifier != client.id" class="fa-solid fa-pen" @click="changeType(client.id)"></i>
-                <i v-if="modifier != client.id" class="fa-solid fa-trash-can" @click="deleteclient(client.id)"></i>
+                <div v-if="modifier == RDV.id"><input style="background-color: green;color: white;border-radius: 7px;padding: 8px 11px;width: 80px;" type="button" @click="updateclient(RDV.id,$event)" value="Save" ></div>
+                <i v-if="modifier != RDV.id" class="fa-solid fa-pen" @click="changeType(RDV.id)"></i>
+                <i v-if="modifier != RDV.id" class="fa-solid fa-trash-can" @click="deleteclient(RDV.id)"></i>
               </div>
             </div>
         </li>
@@ -37,6 +42,7 @@
 <script>
 import NavBarClient from "../components/NavBarClient.vue";
 import Footer from "../components/Footer.vue";
+import Cookies from 'vue-cookies';
 
 export default {
   name: "ClientPage",
@@ -48,11 +54,12 @@ export default {
     return{
       type: 'text',
       display : "display: block;",
-      clients : [],
+      RDVs : [],
       randezs : [],
       modifier: null,
       checkDelete: null,
-      randez : {id : ''}
+      randez : {id : ''},
+      reff : 'rkd202219'
     }
   },
   created() {
@@ -69,20 +76,50 @@ export default {
       
     },
     getclients(){
-            axios.get('http://localhost/management-rdv/backend/api/clients/read.php')
+            axios.post('http://localhost/architecte/backend/api/randez/read.php',{
+              reff : this.reff
+            })
                 .then( (response) => {
-                  this.clients = [...response.data]
+
+                  console.log(response.data);
+                  this.RDVs = response.data
 
                 })
                 .catch(err => console.log(err));
     },
-        deleteclient(id){
-                    axios.delete('http://localhost/management-rdv/backend/api/randez/delete.php?id=' + id)
-                    .then(this.checkDelete = id)
+
+   
+        deleteclient(id){ 
+            Swal.fire({
+                title: 'Are you sure ?',
+                text: "You are going to delete this randez vous",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: 'black',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes',
+                cancelButtonText : 'Cancel'
+            }).then((result) => {
+                if (result.value) {
+                    axios.delete('http://localhost/architecte/backend/api/randez/delete.php?id=' + id)
+                        // consol.log(client.id);
+                        .then(() => {
+                            Swal.fire(
+                                'Deleted !',
+                                'success'
+                            ).then(() => {
+                                this.clients = this.clients.filter(client => {
+                                    return client.id !== id;
+                                })
+                            })
+                        })
+                        .catch(err => console.log(err));
+                }
+            })
         },
         addclient(id){
             if(this.client.RDV !== '' && this.client.CRN !== '' && this.client.clientId !== ''){
-                axios.post('http://localhost/management-rdv/backend/api/randez/create.php',{
+                axios.post('http://localhost/architecte/backend/api/randez/create.php',{
                     RDV : this.client.RDV,
                     CRN : this.client.CRN,
                     clientId :this.client.clientId
@@ -106,16 +143,28 @@ export default {
                 })
             }
         },
-        updateclient() {
+        updateclient(id,event) {
+            let day = event.target.parentElement.parentElement.parentElement.children[0].firstElementChild.value;
+            let time = event.target.parentElement.parentElement.parentElement.children[1].firstElementChild.value;
+            console.log(day,time);
             this.modifier = null;
-            axios.put('http://localhost/management-rdv/backend/api/randez/update.php', {
-                id : this.client.id,
-                CRN: this.client.CRN,
-                RDV: this.client.RDV
-            }).catch(err => console.log(err));
+            axios.put('http://localhost/architecte/backend/api/randez/update.php', {
+                id : id,
+                CRN: day,
+                RDV: time
+            }).then(() => {
+              Swal.fire(
+                'Updated !',
+                        'success'
+                    ).then(() => {
+                      this.getclients(); 
+                        ('#updateclient').modal('hide')
+                    })
+                })
+                .catch(err => console.log(err));
         },
         getclient(id) {
-            axios.post('http://localhost/management-rdv/backend/api/clients/read_single.php?id=' + id)
+            axios.post('http://localhost/architecte/backend/api/clients/read_single.php?id=' + id)
                 .then(response => { this.client = response.data;
   })
                 .catch(err => console.log(err));

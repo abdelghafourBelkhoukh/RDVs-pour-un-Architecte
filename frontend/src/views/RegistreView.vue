@@ -96,6 +96,7 @@ import NavBar from "../components/NavBar.vue";
 import Footer from "../components/Footer.vue";
 import swal from "sweetalert";
 
+
 export default {
   name: "RegistreView",
   data() {
@@ -129,7 +130,7 @@ export default {
         2022+
         this.client.age ;
 
-      const axi = await axios.post("http://localhost/management-rdv/backend/api/clients/create.php", {
+      const axi = await axios.post("http://localhost/architecte/backend/api/clients/create.php", {
         firstname: this.client.firstname,
         lastname: this.client.lastname,
         age: this.client.age,

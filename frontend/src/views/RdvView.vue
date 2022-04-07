@@ -103,7 +103,7 @@ export default {
     },
     async checkRDV(){
       
-      let respo = await axios.post("http://localhost/management-rdv/backend/api/randez/checkRDV.php", {
+      let respo = await axios.post("http://localhost/architecte/backend/api/randez/checkRDV.php", {
         RDV: this.dayRDV.RDV
       });
         console.log(respo.data.data[0].CRN.CRN);
@@ -111,7 +111,7 @@ export default {
 
     },
     addRDV() {
-        axios.post("http://localhost/management-rdv/backend/api/randez/create.php", {
+        axios.post("http://localhost/architecte/backend/api/randez/create.php", {
         RDV: this.dayRDV.RDV,
         CRN: this.dayRDV.CRN,
         reff: this.dayRDV.reff,
