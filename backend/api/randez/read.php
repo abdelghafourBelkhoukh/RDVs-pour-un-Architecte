@@ -30,6 +30,7 @@
 
           $cat_item = array(
             'id' => $id,
+            
             // 'name' => $name
           );
 

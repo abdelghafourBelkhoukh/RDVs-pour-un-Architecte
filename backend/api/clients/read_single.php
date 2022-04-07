@@ -23,14 +23,14 @@
  
   // Create array
   $clients_arr = array(
-        'id' => $clients->id,
-        'firstname' =>$clients->firstname,
-        'lastname' => $clients->lastname,
-        'proff' => $clients->proff,
-        'age' => $clients->age,
-        'reff' => $clients->reff,
-        'CRN' => $clients->CRN,
-        'RDV' => $clients->RDV
+      'id' => $clients->id,
+      'firstname' =>$clients->firstname,
+      'lastname' => $clients->lastname,
+      'proff' => $clients->proff,
+      'age' => $clients->age,
+      'reff' => $clients->reff,
+      'CRN' => $clients->CRN,
+      'RDV' => $clients->RDV
   );
 
   // Make JSON

@@ -10,7 +10,7 @@
   $database = new Database();
   $db = $database->connect();
   // Instantiate blog category object
-  $category = new Category($db);
+  // $category = new Category($db);
 
   // Get ID
   $category->id = isset($_GET['id']) ? $_GET['id'] : die();

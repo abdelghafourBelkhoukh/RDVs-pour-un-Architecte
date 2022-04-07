@@ -2,7 +2,7 @@
        
         
 
-        <div id="DashBoard">
+        <div id="">
             <div class="container">
                 <div class="row mt-4">
                     <div class="col-lg-12 mx-auto">
@@ -15,7 +15,7 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th>id</th>
+                                            <!-- <th>id</th> -->
                                             <th>firstname</th>
                                             <th>lastname</th>
                                             <th>proff</th>
@@ -28,9 +28,9 @@
                                         </tr>
                                     </thead>
                                     <tbody v-for="client in clients" :key="client.id">
-                                        <tr key="index">
-                                            <td>{{client.id}}</td>
-                                            <td scope="row">{{client.firstname}}</td>
+                                        <!-- <tr key="index"> -->
+                                            <!-- <td>{{client.id}}</td> -->
+                                            <td>{{client.firstname}}</td>
                                             <td>{{client.lastname}}</td>
                                             <td>{{client.proff}}</td>
                                             <td>{{client.age}}</td>
@@ -40,11 +40,11 @@
                                             <td>
                                                 <a @click="getclient(client.id)" data-toggle="modal"
                                                     data-target="#updateclient"
-                                                    class="btn btn-sm btn-warning text-white">Update</a>
+                                                    class="btn btn-sm btn-warning text-white mr-2">Update</a>
                                                 <a @click="deleteclient(client.id)"
                                                     class="btn btn-sm btn-danger text-white">Delete</a>
                                             </td>
-                                        </tr>
+                                        <!-- </tr> -->
                                     </tbody>
                                 </table>
                             </div>
@@ -71,7 +71,7 @@
                                         class="form-control">
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" required placeholder="RDV" v-model="client.RDV"
+                                    <input type="date" required placeholder="RDV" v-model="client.RDV"
                                         class="form-control">
                                 </div>
                                 <div class="form-group">
@@ -104,7 +104,7 @@
                                         class="form-control">
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" required placeholder="RDV" v-model="client.RDV"
+                                    <input type="date" required placeholder="RDV" v-model="client.RDV"
                                         class="form-control">
                                 </div>
                                 <div class="form-group">
@@ -128,9 +128,9 @@ export default {
   data (){
         return{
           clients : [],
-          randezs : [],
+        //   randezs : [],
           client : {id : '',firstname : '',lastname : '',proff : '',age : '',reff : '',CRN : '',RDV : '',clientId : ''},
-          randez : {id : ''}
+        //   randez : {id : ''}
         }
     },
     created() {
@@ -148,7 +148,7 @@ export default {
                 text: "You are going to delete this client",
                 type: 'warning',
                 showCancelButton: true,
-                confirmButtonColor: '#3085d6',
+                confirmButtonColor: 'black',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes',
                 cancelButtonText : 'Cancel'
