@@ -26,22 +26,11 @@
 
   // Get post
   if($num > 0){
-  
     // echo $num;
     // die();
-    $i=0;
-  while ( $row = $result->fetchAll(PDO::FETCH_ASSOC)) {
-    extract($row);
-
-  $randez_item = array(
-      'CRN' => $row[$i],
-  );
-
-  $i++;
-  }
-
-// Push to "data"
-  array_push($randez_arr, $randez_item);
+    // $i=0;
+  while ( $row = $result->fetch(PDO::FETCH_ASSOC)) 
+    array_push($randez_arr, $row["CRN"]);
 
   echo json_encode(
         array('data'=>$randez_arr,'response' => true)
