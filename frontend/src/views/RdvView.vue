@@ -15,7 +15,7 @@
             required
             v-model="dayRDV.reff"
           />
-          <input type="submit" @click="HelloMsg" value="Submit" />
+          <input type="submit" @click.prevent="HelloMsg" value="Submit" />
         </div>
 
         <div class="dateRDV" v-if="showDiv == 2">
@@ -25,7 +25,7 @@
             type="date"
             id="start"
             name="trip-start"
-            :min="today"
+            :min="new Date().toISOString().substring(0, 10)"
             max="2030-12-31"
             @change="checkRDV"
             v-model.lazy="dayRDV.RDV"
@@ -33,11 +33,7 @@
           <label for="">Heure</label>
           <select name="" id="" v-model="dayRDV.CRN">
             <option value="" selected >choiser une heure</option>
-            <option value="10 h à 10:30h">10 h à 10:30h</option>
-            <option value="11 h à 11:30h">11 h à 11:30h</option>
-            <option value="14 h à 14:30h">14 h à 14:30h</option>
-            <option value="15 h à 15:30h">15 h à 15:30h</option>
-            <option value="16 h à 16:30h">16 h à 16:30h</option>
+            <option v-for="CRN in availableCRNs" :value="CRN">{{CRN}}</option>
           </select>
           <input type="submit" @click="addRDV" value="Submit" />
         </div>
@@ -74,6 +70,7 @@
 import NavBarRdv from '../components/NavBarRdv.vue';
 import Footer from '../components/Footer.vue';
 
+const CRNs = ["10 h à 10:30h","11 h à 11:30h","14 h à 14:30h","15 h à 15:30h","16 h à 16:30h"]
 export default {
   name: "RegistreView",
   data() {
@@ -81,7 +78,12 @@ export default {
       showDiv: 1,
       RdvCondition: true,
       today : null,
-      dayRDV : { RDV : '', CRN : '',reff : ''}
+      dayRDV: {
+        reff: "",
+        RDV: "",
+        CRN: ""
+      },
+      availableCRNs : [],
     };
   },
   components: {
@@ -90,31 +92,46 @@ export default {
   },
 
   methods: {
-    HelloMsg() {
-      const refID = document.getElementById("referance-id").value;
-      if (this.RdvCondition && refID) {
-        var today = new Date();
-        this.today = today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate();
-        console.log(this.today)
-        this.showDiv = 2;
-      } else {
+      async HelloMsg() {   
+      
+      if (this.dayRDV.reff != '' ) {
+      let respon = await axios.post('http://localhost/architecte/backend/api/clients/loginClient.php', {
+        reff: this.dayRDV.reff
+      });
+
+      console.log(respon);
+      this.RdvCondition = respon.data.response;
+
+        if (this.RdvCondition) {
+          var today = new Date();
+          this.today = today.getFullYear() + '-' + (today.getMonth()+1) + '-' + today.getDate();
+
+          this.showDiv = 2;
+
+        } else {
         this.showDiv = 4;
-      }
+        }
+
+    } else {
+      alert('Please enter reff');
+    }
     },
     async checkRDV(){
       
       let respo = await axios.post("http://localhost/architecte/backend/api/randez/checkRDV.php", {
         RDV: this.dayRDV.RDV
       });
-        console.log(respo.data.data[0].CRN.CRN);
-
+        if(!respo.data.response) this.availableCRNs = CRNs;
+        else this.availableCRNs = CRNs.filter(e => !respo.data.data.includes(e));
 
     },
     addRDV() {
         axios.post("http://localhost/architecte/backend/api/randez/create.php", {
-        RDV: this.dayRDV.RDV,
-        CRN: this.dayRDV.CRN,
-        reff: this.dayRDV.reff,
+
+            RDV: this.dayRDV.RDV,
+            CRN: this.dayRDV.CRN,
+            reff: this.dayRDV.reff,
+
     });
       this.showDiv = 3;
     },
