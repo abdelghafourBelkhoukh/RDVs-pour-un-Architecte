@@ -17,7 +17,7 @@
   // Get raw posted data
   $data = json_decode(file_get_contents("php://input"));
   $randez->RDV = $data->RDV;
-  
+
   $randez_arr = array();
 
   $result = $randez->checkRDV();
@@ -42,7 +42,3 @@
         );
 
   }
-
-  // Create array
-
-  // Make JSON

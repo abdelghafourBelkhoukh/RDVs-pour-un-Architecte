@@ -23,13 +23,14 @@ class randez
   public function read()
   {
     // Create query
-    $query = 'SELECT * FROM randezvous';
+    $query = "SELECT * FROM randezvous WHERE reff = :reff";
 
     // Prepare statement
     $stmt = $this->conn->prepare($query);
 
+
     // Execute query
-    $stmt->execute();
+    $stmt->execute(["reff"=>$this->reff]);
 
     return $stmt;
   }

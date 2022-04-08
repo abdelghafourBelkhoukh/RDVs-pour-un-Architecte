@@ -18,7 +18,7 @@
       <div style="display: flex;width: 100%;align-items: center;">
         <div v-for="data in Object.values(client).slice(1)" class="col col-1" data-label="First name"><input :type="(modifier == client.id)? 'text' : 'submit'" :value="data"></div>
         <div class="col col-8 action-icon" data-label="Action">
-          <div v-if="modifier == client.id"><input style="background-color: green;color: white;border-radius: 7px;padding: 8px 11px;width: 80px;" type="button" @click="updateclient" value="Save" ></div>
+          <div v-if="modifier == client.id"><input style="background-color: green;color: white;border-radius: 7px;padding: 8px 11px;width: 80px;" type="button" @click="updateclient(client.id,$event)" value="Save" ></div>
           <i v-if="modifier != client.id" class="fa-solid fa-pen" @click="changeType(client.id)"></i>
           <i v-if="modifier != client.id" class="fa-solid fa-trash-can" @click="deleteclient(client.id)"></i>
         </div>
@@ -45,7 +45,7 @@ export default {
       randezs : [],
       modifier: null,
       checkDelete: null,
-      randez : {id : ''}
+      randez : {id : ''},
     }
   },
   created() {
@@ -70,12 +70,36 @@ export default {
                 .catch(err => console.log(err));
     },
         deleteclient(id){
+            Swal.fire({
+                title: 'Are you sure ?',
+                text: "You are going to delete this client",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: 'black',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes',
+                cancelButtonText : 'Cancel'
+            }).then((result) => {
+                if (result.value) {
                     axios.delete('http://localhost/architecte/backend/api/randez/delete.php?id=' + id)
-                    .then(this.checkDelete = id)
+                        // consol.log(client.id);
+                        .then(() => {
+                            Swal.fire(
+                                'Deleted !',
+                                'success'
+                            ).then(() => {
+                                this.clients = this.clients.filter(client => {
+                                    return client.id !== id;
+                                })
+                            })
+                        })
+                        .catch(err => console.log(err));
+                }
+            })
         },
         addclient(id){
             if(this.client.RDV !== '' && this.client.CRN !== '' && this.client.clientId !== ''){
-                axios.post('http://localhost/management-rdv/backend/api/randez/create.php',{
+                axios.post('http://localhost/architecte/backend/api/randez/create.php',{
                     RDV : this.client.RDV,
                     CRN : this.client.CRN,
                     clientId :this.client.clientId
@@ -99,13 +123,25 @@ export default {
                 })
             }
         },
-        updateclient() {
-            this.modifier = null;
+        updateclient(id,event) {
+            let day = event.target.parentElement.parentElement.parentElement.children[5].firstElementChild.value;
+            let time = event.target.parentElement.parentElement.parentElement.children[6].firstElementChild.value;
+            console.log(day,time);
             axios.put('http://localhost/architecte/backend/api/randez/update.php', {
-                id : this.client.id,
-                CRN: this.client.CRN,
-                RDV: this.client.RDV
-            }).catch(err => console.log(err));
+              id : id,
+                CRN: day,
+                RDV: time
+            }).then(() => {
+              Swal.fire(
+                'Updated !',
+                        'success'
+                    ).then(() => {
+                      this.getclients(); 
+                        ('#updateclient').modal('hide')
+                    })
+                })
+                .catch(err => console.log(err));
+          this.modifier = null;
         },
         getclient(id) {
             axios.post('http://localhost/architecte/backend/api/clients/read_single.php?id=' + id)

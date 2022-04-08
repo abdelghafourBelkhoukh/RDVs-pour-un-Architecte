@@ -47,6 +47,7 @@
 import router from "@/router";
 import NavBar from '../components/NavBar.vue';
 import Footer from '../components/Footer.vue';
+import Cookies from 'vue-cookies';
 
 export default {
   name: "RegistreView",
@@ -91,12 +92,14 @@ export default {
     if (this.reff.ClientReff != '' ) {
       let respon = await axios.post('http://localhost/architecte/backend/api/clients/loginClient.php', {
         reff: this.reff.ClientReff
+        
       });
-
       console.log(respon);
       this.checkRef = respon.data.response;
 
         if (this.checkRef) {
+          Cookies.set('refference',this.reff.ClientReff);
+          console.log(Cookies.get('refference'));
 
           this.$router.push('/ClientPage')
 

@@ -96,6 +96,7 @@ import NavBar from "../components/NavBar.vue";
 import Footer from "../components/Footer.vue";
 import swal from "sweetalert";
 
+
 export default {
   name: "RegistreView",
   data() {

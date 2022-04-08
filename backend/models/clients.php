@@ -25,7 +25,7 @@ class clients
 
   public function loginAdmin()
     {
-        $query = "SELECT * FROM admins WHERE reff =:reff";
+        $query = "SELECT * FROM admin WHERE reff =:reff";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':reff', $this->reff);
         $stmt->execute();
