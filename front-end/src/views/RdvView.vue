@@ -25,7 +25,7 @@
             type="date"
             id="start"
             name="trip-start"
-            :min="today"
+            :min="new Date().toISOString().substring(0, 10)"
             max="2030-12-31"
             @change="checkRDV"
             v-model.lazy="dayRDV.RDV"
@@ -78,7 +78,11 @@ export default {
       showDiv: 1,
       RdvCondition: true,
       today : null,
-      dayRDV : { RDV : '', CRN : '',reff : ''},
+      dayRDV: {
+        reff: "",
+        RDV: "",
+        CRN: ""
+      },
       availableCRNs : [],
     };
   },
