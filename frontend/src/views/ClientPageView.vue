@@ -59,7 +59,9 @@ export default {
       modifier: null,
       checkDelete: null,
       randez : {id : ''},
-      reff : 'rkd202219'
+     
+      // Cookies.set('refference',this.reff.ClientReff);
+      //     console.log(Cookies.get('refference'));
     }
   },
   created() {
@@ -77,7 +79,7 @@ export default {
     },
     getclients(){
             axios.post('http://localhost/architecte/backend/api/randez/read.php',{
-              reff : this.reff
+              reff : Cookies.get('refference')
             })
                 .then( (response) => {
 
@@ -108,8 +110,8 @@ export default {
                                 'Deleted !',
                                 'success'
                             ).then(() => {
-                                this.clients = this.clients.filter(client => {
-                                    return client.id !== id;
+                                this.RDVs = this.RDVs.filter(RDV => {
+                                    return RDV.id !== id;
                                 })
                             })
                         })
