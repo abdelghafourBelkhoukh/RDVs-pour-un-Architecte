@@ -8,4 +8,4 @@ La partie client contient une page d'authentification
 une page de login pour ceux qui ont déja visité le siteweb , et une
 dashbord sur laquelle un client peut réserver 
 ses rendez-vous et voir son historique. cet historique est modifiable 
-par le client si seulement si le rendez-vous est après 24h au moins...
+par le client 
